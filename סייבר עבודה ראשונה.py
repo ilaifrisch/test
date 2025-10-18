@@ -1,0 +1,19 @@
+from PIL import Image, ImageDraw, ImageFont
+from bidi.algorithm import get_display
+import os
+template_path = "card.jpg"
+names_file = "סייבר שמות.txt"
+output_dir = "out_cards"
+template = Image.open(template_path)
+font = ImageFont.truetype("arial.ttf", 48)
+with open(names_file, "r") as f:
+    names = [line.strip() for line in f if line.strip()]
+os.makedirs(output_dir, exist_ok=True)
+for name in names:
+    img = template.copy()
+    draw = ImageDraw.Draw(img)
+text = f"ל{name}, חג שמח!"
+text_rtl = get_display(text)
+draw.text(position, text_rtl, font=font, fill="black")
+output_path = os.path.join(output_dir, f"{name}.png")
+img.save(output_path)
